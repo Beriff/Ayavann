@@ -115,7 +115,7 @@ namespace Ayavann
 			_spriteBatch.Draw(texture, Vector2.Zero, Color.White);
 			_spriteBatch.End();
 
-			Ship.DrawModel(camera.Model, camera.View, camera.Projection);
+			Ship.DrawModel(camera.Model, camera.GetViewMatrix(), camera.Projection);
 
 			base.Draw(gameTime);
 		}
