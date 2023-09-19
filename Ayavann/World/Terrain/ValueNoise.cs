@@ -1,9 +1,6 @@
 ﻿using Ayavann.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ayavann.World.Terrain
 {
@@ -79,7 +76,7 @@ namespace Ayavann.World.Terrain
 		{
 			Texture2D t = new Texture2D(gd, size, size);
 			Color[] data = new Color[size * size];
-			NumExtend.XY(size, size, (x,y) =>
+			NumExtend.XY(size, size, (x, y) =>
 			{
 				var val = Noise(new(x, y));
 				data[x * size + y] = new Color(val, val, val);

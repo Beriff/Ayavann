@@ -1,8 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ayavann.Scene
 {
@@ -10,7 +7,6 @@ namespace Ayavann.Scene
 	{
 		public Vector3 Position;
 		public Vector3 Target;
-
 		public Matrix Projection;
 		public Matrix View;
 		public Matrix Model;

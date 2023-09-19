@@ -1,7 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ayavann.Physics
 {
@@ -14,8 +11,8 @@ namespace Ayavann.Physics
 			b.Normalize();
 			return b;
 		}
-		public static Vector2 XY(this Vector3 a) => new Vector2(a.X, a.Y);
-		public static Vector3 Vec3(this Vector2 a) => new Vector3(a.X, a.Y, 0);
+		public static Vector2 XY(this Vector3 a) => new(a.X, a.Y);
+		public static Vector3 Vec3(this Vector2 a) => new(a.X, a.Y, 0);
 		public static Rectangle Vec2Rect(Vector2 b, Vector2 c) => new Rectangle(b.ToPoint(), c.ToPoint());
 		public static Vector2 Rotated(this Vector2 a, double theta)
 		{

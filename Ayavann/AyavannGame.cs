@@ -8,7 +8,7 @@ namespace Ayavann
 {
 	public class AyavannGame : Game
 	{
-		private GraphicsDeviceManager _graphics;
+		private readonly GraphicsDeviceManager _graphics;
 		private SpriteBatch _spriteBatch;
 
 		BasicEffect basicEffect;
@@ -19,7 +19,7 @@ namespace Ayavann
 
 		public AyavannGame()
 		{
-			_graphics = new GraphicsDeviceManager(this);
+			_graphics = new(this);
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
 		}
@@ -27,13 +27,15 @@ namespace Ayavann
 		protected override void Initialize()
 		{
 			// TODO: Add your initialization logic here
-			basicEffect = new(GraphicsDevice);
-			basicEffect.Alpha = 1f;
-			basicEffect.VertexColorEnabled = true;
-			basicEffect.LightingEnabled = false;
+			basicEffect = new(GraphicsDevice)
+			{
+					Alpha = 1f,
+					VertexColorEnabled = true,
+					LightingEnabled = false
+			};
 
 			VertexPositionColor[] triangle = new VertexPositionColor[3]
-			{ 
+			{
 				new(new(0, 20, 10), Color.Red),
 				new(new(-20, -20, 10), Color.Green),
 				new(new(20, -20, 10), Color.Blue)
@@ -57,11 +59,11 @@ namespace Ayavann
 
 		protected override void Update(GameTime gameTime)
 		{
-			
+
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			if(Keyboard.GetState().IsKeyDown(Keys.W))
+			if (Keyboard.GetState().IsKeyDown(Keys.W))
 			{
 				camera.Position -= Vector3.Forward;
 			}
@@ -79,7 +81,7 @@ namespace Ayavann
 			}
 			if (Keyboard.GetState().IsKeyDown(Keys.G))
 			{
-				RasterizerState rasterizerState = new RasterizerState();
+				RasterizerState rasterizerState = new();
 				rasterizerState.FillMode = FillMode.WireFrame;
 				GraphicsDevice.RasterizerState = rasterizerState;
 			}
