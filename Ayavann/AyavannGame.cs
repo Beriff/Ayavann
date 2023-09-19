@@ -1,5 +1,6 @@
 ﻿using Ayavann.Scene;
 using Ayavann.World.Terrain;
+using Ayavann.World.Entity;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -16,6 +17,7 @@ namespace Ayavann
 		Camera camera;
 		Region c;
 		Texture2D texture;
+		private Entity Ship = new();
 
 		public AyavannGame()
 		{
@@ -29,9 +31,9 @@ namespace Ayavann
 			// TODO: Add your initialization logic here
 			basicEffect = new(GraphicsDevice)
 			{
-					Alpha = 1f,
-					VertexColorEnabled = true,
-					LightingEnabled = false
+				Alpha = 1f,
+				VertexColorEnabled = true,
+				LightingEnabled = false
 			};
 
 			VertexPositionColor[] triangle = new VertexPositionColor[3]
@@ -54,6 +56,9 @@ namespace Ayavann
 		{
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 			texture = OctaveValueNoise.AuxiliaryNoise(0).GetTexture(GraphicsDevice);
+			Model odel = Content.Load<Model>("ship2");
+			Ship.model = odel;
+
 			// TODO: use this.Content to load your game content here
 		}
 
@@ -90,6 +95,8 @@ namespace Ayavann
 			base.Update(gameTime);
 		}
 
+
+
 		protected override void Draw(GameTime gameTime)
 		{
 			camera.ApplyCameraTransform(basicEffect);
@@ -107,6 +114,8 @@ namespace Ayavann
 			_spriteBatch.Begin();
 			_spriteBatch.Draw(texture, Vector2.Zero, Color.White);
 			_spriteBatch.End();
+
+			Ship.DrawModel(camera.Model, camera.View, camera.Projection);
 
 			base.Draw(gameTime);
 		}
