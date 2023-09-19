@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Ayavann.Physics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Ayavann.World.Terrain
@@ -23,7 +24,7 @@ namespace Ayavann.World.Terrain
 			chunk.VertexValue[1] = TerrainScale * MathF.Pow(noise.Noise(vector_coords + Vector2.UnitX), -2);
 			chunk.VertexValue[2] = TerrainScale * MathF.Pow(noise.Noise(vector_coords + Vector2.UnitY), -2);
 			chunk.VertexValue[3] = TerrainScale * MathF.Pow(noise.Noise(vector_coords + new Vector2(1,1)), -2);
-			chunk.Position = new(vector_coords.X, -25f, vector_coords.Y);
+			chunk.Position = new(vector_coords.X * Scale, -25f, vector_coords.Y * Scale);
 
 			chunk.GenVertices();
 			return chunk;
@@ -33,7 +34,7 @@ namespace Ayavann.World.Terrain
 		public Chunk(float[] vertices, Vector3 pos)
 		{
 			VertexValue = vertices;
-			Position = pos;
+			Position = pos * new Vector3(Scale, 1, Scale);
 		}
 
 		private void GenVertices()
@@ -47,12 +48,8 @@ namespace Ayavann.World.Terrain
 
 			Vertices =  new VertexPositionColor[] { vertices[0], vertices[1], vertices[2], vertices[2], vertices[1], vertices[3] };
 
-			Console.WriteLine(vertices[0]);
-			Console.WriteLine(vertices[1]);
-			Console.WriteLine(vertices[2]);
-			Console.WriteLine(vertices[3]);
-		}
-		private int[] GenIndices() => new int[6] { 0, 1, 2, /**/ 1, 2, 3 };
+        }
+		private int[] GenIndices() => new int[6] { 1, 2, 0,  2, 3, 1 };
 		public void RenderChunk(GraphicsDevice gd, BasicEffect be)
 		{
 			// Create a vbo of chunk surface
@@ -63,8 +60,9 @@ namespace Ayavann.World.Terrain
 			foreach (var pass in be.CurrentTechnique.Passes)
 			{
 				pass.Apply();
-				gd.DrawPrimitives(PrimitiveType.TriangleList, 0, 6);
-				//gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, Vertices, 0, 6, GenIndices(), 0, 2);
+                gd.DrawPrimitives(PrimitiveType.TriangleStrip, 0, 3);
+				gd.DrawPrimitives(PrimitiveType.TriangleStrip, 3, 6);
+				//gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleStrip, Vertices, 0, 6, GenIndices(), 0, 2);
 			}
 		}
 	}

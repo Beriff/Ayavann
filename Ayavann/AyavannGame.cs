@@ -14,7 +14,7 @@ namespace Ayavann
 		BasicEffect basicEffect;
 		VertexBuffer vbo;
 		Camera camera;
-		Chunk c;
+		Region c;
 		Texture2D texture;
 
 		public AyavannGame()
@@ -44,7 +44,7 @@ namespace Ayavann
 			vbo.SetData(triangle);
 			camera = new(GraphicsDevice);
 
-			c = Chunk.GetChunk(OctaveValueNoise.AuxiliaryNoise(0), new(0, 0));
+			c = new Region(OctaveValueNoise.AuxiliaryNoise(1), Vector2.Zero);
 			System.Console.WriteLine($"{new Vector3(1, 0, 1) * 10f}");
 
 			base.Initialize();
@@ -83,6 +83,7 @@ namespace Ayavann
 			{
 				RasterizerState rasterizerState = new();
 				rasterizerState.FillMode = FillMode.WireFrame;
+				rasterizerState.CullMode = CullMode.None;
 				GraphicsDevice.RasterizerState = rasterizerState;
 			}
 
@@ -101,7 +102,7 @@ namespace Ayavann
 				pass.Apply();
 				GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 3);
 			}*/
-			c.RenderChunk(GraphicsDevice, basicEffect);
+			c.Render(GraphicsDevice, basicEffect);
 
 			_spriteBatch.Begin();
 			_spriteBatch.Draw(texture, Vector2.Zero, Color.White);

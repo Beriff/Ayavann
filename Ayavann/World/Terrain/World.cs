@@ -7,6 +7,6 @@ namespace Ayavann.World.Terrain
 	class World
 	{
 		private OctaveValueNoise WorldNoise;
-
+		
 	}
 }
