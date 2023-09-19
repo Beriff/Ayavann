@@ -1,3 +1,2 @@
-﻿using Ayavann;
-using AyavannGame game = new();
+﻿Ayavann.AyavannGame game = new();
 game.Run();
