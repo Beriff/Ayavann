@@ -23,6 +23,7 @@ namespace Ayavann.World.Terrain
 
 		public void Render(GraphicsDevice gd, BasicEffect be)
 		{
+
 			NumExtend.XY(RegionSize, RegionSize, (x, y) =>
 			{
 				Chunks[x, y].RenderChunk(gd, be);

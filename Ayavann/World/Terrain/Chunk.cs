@@ -11,7 +11,7 @@ namespace Ayavann.World.Terrain
 		public float[] VertexValue;
 		public Vector3 Position;
 
-		private VertexPositionColor[] Vertices;
+		public VertexPositionColor[] Vertices;
 
 		/// <summary>
 		/// Note that chunk (a: x, b: y) coordinates are world (a: x, y, b: z) coordinates
@@ -57,8 +57,10 @@ namespace Ayavann.World.Terrain
 			foreach (var pass in be.CurrentTechnique.Passes)
 			{
 				pass.Apply();
-				gd.DrawPrimitives(PrimitiveType.TriangleStrip, 0, 3);
-				gd.DrawPrimitives(PrimitiveType.TriangleStrip, 3, 6);
+				gd.DrawPrimitives(PrimitiveType.TriangleList, 0, 3);
+				gd.DrawPrimitives(PrimitiveType.TriangleList, 2, 3);
+				
+				
 				//gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleStrip, Vertices, 0, 6, GenIndices(), 0, 2);
 			}
 		}
