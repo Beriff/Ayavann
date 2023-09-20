@@ -46,7 +46,7 @@ namespace Ayavann.World.Terrain
 			vertices[3] = new(Position + new Vector3(Scale, VertexValue[3], Scale), Color.White);
 			Vertices = new VertexPositionColor[] { vertices[0], vertices[1], vertices[2], vertices[2], vertices[1], vertices[3] };
 		}
-		private int[] GenIndices() => new int[6] { 1, 2, 0, 2, 3, 1 };
+		private int[] GenIndices() => new int[6] { 1, 2, 0, 1, 2, 3 };
 		public void RenderChunk(GraphicsDevice gd, BasicEffect be)
 		{
 			// Create a vbo of chunk surface
@@ -58,11 +58,13 @@ namespace Ayavann.World.Terrain
 			{
 				pass.Apply();
 				gd.DrawPrimitives(PrimitiveType.TriangleList, 0, 3);
-				gd.DrawPrimitives(PrimitiveType.TriangleList, 2, 3);
+				gd.DrawPrimitives(PrimitiveType.TriangleList, 3, 3);
 				
 				
 				//gd.DrawUserIndexedPrimitives(PrimitiveType.TriangleStrip, Vertices, 0, 6, GenIndices(), 0, 2);
 			}
+
+			vbo.Dispose();
 		}
 	}
 }
