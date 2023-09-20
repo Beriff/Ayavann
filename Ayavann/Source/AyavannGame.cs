@@ -71,7 +71,7 @@ public class AyavannGame : Game
 			GraphicsDevice.RasterizerState = rasterizerState;
 		}
 
-		camera.Model = Ship.Update(camera.Model);
+		Ship.Position += new Vector3(1, 0, 0);
 
 		base.Update(gameTime);
 	}
