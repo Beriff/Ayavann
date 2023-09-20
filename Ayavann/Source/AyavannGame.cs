@@ -53,7 +53,7 @@ public class AyavannGame : Game
 	{
 		_spriteBatch = new SpriteBatch(GraphicsDevice);
 		texture = OctaveValueNoise.AuxiliaryNoise(0).GetTexture(GraphicsDevice);
-		Ship.Model = Content.Load<Model>("ship2");
+		Ship.Model = Content.Load<Model>("slime");
 	}
 
 	protected override void Update(GameTime gameTime)
@@ -70,6 +70,8 @@ public class AyavannGame : Game
 			rasterizerState.CullMode = CullMode.None;
 			GraphicsDevice.RasterizerState = rasterizerState;
 		}
+
+		camera.Model = Ship.Update(camera.Model);
 
 		base.Update(gameTime);
 	}
