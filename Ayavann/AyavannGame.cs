@@ -53,7 +53,7 @@ public class AyavannGame : Game
 	{
 		_spriteBatch = new SpriteBatch(GraphicsDevice);
 		texture = OctaveValueNoise.AuxiliaryNoise(0).GetTexture(GraphicsDevice);
-		Ship.model = Content.Load<Model>("ship2");
+		Ship.Model = Content.Load<Model>("ship2");
 	}
 
 	protected override void Update(GameTime gameTime)
