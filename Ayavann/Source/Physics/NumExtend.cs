@@ -10,10 +10,16 @@ static class NumExtend
 		b.Normalize();
 		return b;
 	}
+	public static Vector3 Normalized(this Vector3 a)
+	{
+		var b = a;
+		b.Normalize();
+		return b;
+	}
 	public static Vector2 XY(this Vector3 a) => new(a.X, a.Y);
 	public static Vector2 XZ(this Vector3 a) => new(a.X, a.Z);
 	public static Vector3 Vec3(this Vector2 a) => new(a.X, a.Y, 0);
-	public static Rectangle Vec2Rect(Vector2 b, Vector2 c) => new Rectangle(b.ToPoint(), c.ToPoint());
+	public static float Cross(this Vector2 a, Vector2 b) => a.X * b.Y - a.Y * b.X;
 	public static Vector2 Rotated(this Vector2 a, double theta)
 	{
 		return new((float)(a.X * Math.Cos(theta) - a.Y * Math.Sin(theta)), (float)(a.X * Math.Sin(theta) + a.Y * Math.Cos(theta)));
@@ -23,10 +29,6 @@ static class NumExtend
 		return b - a;
 	}
 	public static float Distance(this Vector2 a, Vector2 b) => a.PointTo(b).Length();
-	public static float MinDiff(float a)
-	{
-		return (a - MathF.Floor(a)) * 10;
-	}
 	public static float Lerp(float v0, float v1, float t)
 	{
 		return v0 + t * (v1 - v0);

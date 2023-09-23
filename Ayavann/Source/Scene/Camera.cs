@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Ayavann.Physics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Ayavann.Scene
@@ -12,10 +13,14 @@ namespace Ayavann.Scene
 		public Matrix Model;
 
 		public bool UpdateTarget;
+		public Vector3 GetForward()
+		{
+			return (Position - Target).Normalized();
+		}
 
 		public Camera(GraphicsDevice gd, bool update_target = false)
 		{
-			Projection = Matrix.CreatePerspectiveFieldOfView(MathF.PI / 4, gd.Viewport.AspectRatio, 1f, 1000f);
+			Projection = Matrix.CreatePerspectiveFieldOfView(MathF.PI / 4, gd.Viewport.AspectRatio, .1f, 500f);
 			Model = Matrix.CreateWorld(Vector3.Zero, Vector3.Forward, Vector3.UnitY);
 			Position = new(0f, 0f, -100f);
 			Target = Vector3.UnitZ;

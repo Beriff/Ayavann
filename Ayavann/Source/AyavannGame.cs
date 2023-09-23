@@ -4,6 +4,7 @@ using Ayavann.World.Entity;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Ayavann.Physics;
 
 namespace Ayavann;
 public class AyavannGame : Game
@@ -16,6 +17,8 @@ public class AyavannGame : Game
 	private Region c;
 	private Texture2D texture;
 	private Entity Ship = new();
+
+	private World.Terrain.World world = new(OctaveValueNoise.AuxiliaryNoise(1));
 
 	public AyavannGame()
 	{
@@ -43,8 +46,8 @@ public class AyavannGame : Game
 		vbo.SetData(triangle);
 		camera = new(GraphicsDevice);
 
-		c = new Region(OctaveValueNoise.AuxiliaryNoise(1), Vector2.Zero);
-		Console.WriteLine($"{new Vector3(1, 0, 1) * 10f}");
+		_graphics.PreferredDepthStencilFormat = DepthFormat.Depth24;
+		_graphics.ApplyChanges();
 
 		base.Initialize();
 	}
@@ -63,6 +66,8 @@ public class AyavannGame : Game
 		if (Keyboard.GetState().IsKeyDown(Keys.S)) camera.Position += Vector3.Forward;
 		if (Keyboard.GetState().IsKeyDown(Keys.A)) camera.Position -= Vector3.Left;
 		if (Keyboard.GetState().IsKeyDown(Keys.D)) camera.Position -= Vector3.Right;
+		if (Keyboard.GetState().IsKeyDown(Keys.Space)) camera.Position += Vector3.Up;
+		if (Keyboard.GetState().IsKeyDown(Keys.LeftShift)) camera.Position += Vector3.Down;
 		if (Keyboard.GetState().IsKeyDown(Keys.G))
 		{
 			RasterizerState rasterizerState = new();
@@ -78,22 +83,19 @@ public class AyavannGame : Game
 
 	protected override void Draw(GameTime gameTime)
 	{
+		
 		camera.ApplyCameraTransform(basicEffect);
-		//GraphicsDevice.SetVertexBuffer(vbo);
-		GraphicsDevice.Clear(ClearOptions.DepthBuffer | ClearOptions.Target, Color.CornflowerBlue, 1f, 0);
-		/*foreach(var pass in basicEffect.CurrentTechnique.Passes)
-		{
-			pass.Apply();
-			GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 3);
-		}*/
-		c.Render(GraphicsDevice, basicEffect);
+		GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1f, 0);
+		
+		world.RenderAt(GraphicsDevice, basicEffect, camera.Position.XZ()/10);
+        Console.WriteLine(camera.GetForward());
 
-		_spriteBatch.Begin();
+
+        Ship.DrawModel(camera.Model, camera.GetViewMatrix(), camera.Projection);
+
+		_spriteBatch.Begin(depthStencilState: DepthStencilState.Default);
 		_spriteBatch.Draw(texture, Vector2.Zero, Color.White);
 		_spriteBatch.End();
-
-		Ship.DrawModel(camera.Model, camera.GetViewMatrix(), camera.Projection);
-
 		base.Draw(gameTime);
 	}
 }
