@@ -16,7 +16,10 @@ public class AyavannGame : Game
 	private Camera camera;
 	private Region c;
 	private Texture2D texture;
-	private Entity Ship = new();
+	private Texture2D healthTexture;
+	private BasicEffect slimeEffect;
+	private Creature Slime;
+	private readonly List<Creature> creatures = new();
 
 	private World.Terrain.World world = new(OctaveValueNoise.AuxiliaryNoise(1));
 
@@ -45,10 +48,15 @@ public class AyavannGame : Game
 		vbo = new(GraphicsDevice, typeof(VertexPositionColor), 3, BufferUsage.WriteOnly);
 		vbo.SetData(triangle);
 		camera = new(GraphicsDevice);
+		c = new Region(OctaveValueNoise.AuxiliaryNoise(1), Vector2.Zero);
 
-		_graphics.PreferredDepthStencilFormat = DepthFormat.Depth24;
-		_graphics.ApplyChanges();
-
+		slimeEffect = new BasicEffect(GraphicsDevice)
+		{
+			TextureEnabled = true,
+			VertexColorEnabled = true,
+		};
+		Slime = new(slimeEffect);
+		creatures.Add(Slime);
 		base.Initialize();
 	}
 
@@ -56,7 +64,8 @@ public class AyavannGame : Game
 	{
 		_spriteBatch = new SpriteBatch(GraphicsDevice);
 		texture = OctaveValueNoise.AuxiliaryNoise(0).GetTexture(GraphicsDevice);
-		Ship.Model = Content.Load<Model>("slime");
+		Slime.Model = Content.Load<Model>("slime");
+		healthTexture = Content.Load<Texture2D>("HealthBar");
 	}
 
 	protected override void Update(GameTime gameTime)
@@ -76,8 +85,7 @@ public class AyavannGame : Game
 			GraphicsDevice.RasterizerState = rasterizerState;
 		}
 
-		Ship.Position += new Vector3(1, 0, 0);
-
+		Slime.Position += new Vector3(new Random().NextSingle() * 0.01f, 0, new Random().NextSingle() * 0.01f);
 		base.Update(gameTime);
 	}
 
@@ -91,7 +99,8 @@ public class AyavannGame : Game
         Console.WriteLine(camera.GetForward());
 
 
-        Ship.DrawModel(camera.Model, camera.GetViewMatrix(), camera.Projection);
+		foreach (Creature creature in creatures) creature.DrawHealthBar(_spriteBatch, healthTexture, camera);
+		Slime.DrawModel(camera.GetViewMatrix(), camera.Projection);
 
 		_spriteBatch.Begin(depthStencilState: DepthStencilState.Default);
 		_spriteBatch.Draw(texture, Vector2.Zero, Color.White);
