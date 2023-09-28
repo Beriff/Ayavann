@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Ayavann.Physics;
+using System.Xml;
 
 namespace Ayavann;
 public class AyavannGame : Game
@@ -20,18 +21,21 @@ public class AyavannGame : Game
 	private BasicEffect slimeEffect;
 	// private Creature Slime;
 	private readonly List<Creature> creatures = new();
+	private SpriteFont font;
 
-	private World.Terrain.World world = new(OctaveValueNoise.AuxiliaryNoise(1));
+	private World.Terrain.World world;
 
 	public AyavannGame()
 	{
 		_graphics = new(this);
 		Content.RootDirectory = "Content";
 		IsMouseVisible = true;
-	}
+        Console.WriteLine(Vector2.UnitY.Cross(Vector2.UnitY.Rotated(Math.PI / 4f)*5 ) );
+    }
 
 	protected override void Initialize()
 	{
+
 		basicEffect = new(GraphicsDevice)
 		{
 			Alpha = 1f,
@@ -48,6 +52,7 @@ public class AyavannGame : Game
 		vbo = new(GraphicsDevice, typeof(VertexPositionColor), 3, BufferUsage.WriteOnly);
 		vbo.SetData(triangle);
 		camera = new(GraphicsDevice);
+		world = new(OctaveValueNoise.AuxiliaryNoise(1), camera);
 		c = new Region(OctaveValueNoise.AuxiliaryNoise(1), Vector2.Zero);
 
 		slimeEffect = new BasicEffect(GraphicsDevice)
@@ -72,6 +77,7 @@ public class AyavannGame : Game
 			creature.Model = Content.Load<Model>("slime");
 		}
 		healthTexture = Content.Load<Texture2D>("HealthBar");
+		font = Content.Load<SpriteFont>("default");
 	}
 
 	protected override void Update(GameTime gameTime)
@@ -105,8 +111,7 @@ public class AyavannGame : Game
 		camera.ApplyCameraTransform(basicEffect);
 		GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1f, 0);
 
-		world.RenderAt(GraphicsDevice, basicEffect, camera.Position.XZ()/10);
-        // Console.WriteLine(camera.GetForward());
+		world.Render(GraphicsDevice, basicEffect);
 
 
 		foreach (Creature creature in creatures) {
@@ -117,6 +122,7 @@ public class AyavannGame : Game
 
 		_spriteBatch.Begin(depthStencilState: DepthStencilState.Default);
 		_spriteBatch.Draw(texture, Vector2.Zero, Color.White);
+		_spriteBatch.DrawString(font, $"FPS {Math.Round(1f/gameTime.ElapsedGameTime.TotalSeconds)}", Vector2.Zero, Color.White);
 		_spriteBatch.End();
 		base.Draw(gameTime);
 	}

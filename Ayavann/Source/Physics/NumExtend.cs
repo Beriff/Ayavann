@@ -19,7 +19,16 @@ static class NumExtend
 	public static Vector2 XY(this Vector3 a) => new(a.X, a.Y);
 	public static Vector2 XZ(this Vector3 a) => new(a.X, a.Z);
 	public static Vector3 Vec3(this Vector2 a) => new(a.X, a.Y, 0);
+	public static Vector2 Apply(this Vector2 a, Func<float, float> f) => new(f(a.X), f(a.Y));
+	public static Vector2 Apply(this Vector2 a, Func<float, int> f) => new(f(a.X), f(a.Y));
+	public static Vector3 Apply(this Vector3 a, Func<float, float> f) => new(f(a.X), f(a.Y), f(a.Z));
+	public static Vector3 Apply(this Vector3 a, Func<float, int> f) => new(f(a.X), f(a.Y), f(a.Z));
+	public static Vector2 Sign(this Vector2 a) => a.Apply(MathF.Sign);
 	public static float Cross(this Vector2 a, Vector2 b) => a.X * b.Y - a.Y * b.X;
+	public static bool IsBetween(this Vector2 target, Vector2 a, Vector2 b)
+	{
+		return Math.Sign(target.Cross(a)) == Math.Sign(b.Cross(target));
+	}
 	public static Vector2 Rotated(this Vector2 a, double theta)
 	{
 		return new((float)(a.X * Math.Cos(theta) - a.Y * Math.Sin(theta)), (float)(a.X * Math.Sin(theta) + a.Y * Math.Cos(theta)));
