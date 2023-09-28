@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+## bury the configs deep within; cast asid theres no need for them
+.vscode/
+
 # User-specific files
 *.rsuser
 *.suo

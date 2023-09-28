@@ -18,7 +18,7 @@ public class AyavannGame : Game
 	private Texture2D texture;
 	private Texture2D healthTexture;
 	private BasicEffect slimeEffect;
-	private Creature Slime;
+	// private Creature Slime;
 	private readonly List<Creature> creatures = new();
 
 	private World.Terrain.World world = new(OctaveValueNoise.AuxiliaryNoise(1));
@@ -55,8 +55,11 @@ public class AyavannGame : Game
 			TextureEnabled = true,
 			VertexColorEnabled = true,
 		};
-		Slime = new(slimeEffect);
-		creatures.Add(Slime);
+		// Slime = new(slimeEffect);
+		for (int i = 0; i < 10; i++) {
+			creatures.Add(new(slimeEffect));
+		}
+		// creatures.Add(Slime);
 		base.Initialize();
 	}
 
@@ -64,7 +67,10 @@ public class AyavannGame : Game
 	{
 		_spriteBatch = new SpriteBatch(GraphicsDevice);
 		texture = OctaveValueNoise.AuxiliaryNoise(0).GetTexture(GraphicsDevice);
-		Slime.Model = Content.Load<Model>("slime");
+		// Slime.Model = Content.Load<Model>("slime");
+		foreach (Creature creature in creatures) {
+			creature.Model = Content.Load<Model>("slime");
+		}
 		healthTexture = Content.Load<Texture2D>("HealthBar");
 	}
 
@@ -84,23 +90,30 @@ public class AyavannGame : Game
 			rasterizerState.CullMode = CullMode.None;
 			GraphicsDevice.RasterizerState = rasterizerState;
 		}
-
-		Slime.Position += new Vector3(new Random().NextSingle() * 0.01f, 0, new Random().NextSingle() * 0.01f);
+		int i = 1;
+		foreach (Creature creature in creatures) {
+			creature.Position += new Vector3((float)(new Random(i*15).NextSingle() * Math.Pow(-1, new Random().Next())) * 0.1f, 0, (new Random(1*27).NextSingle() * (1 - (-1)) + (-1)) * 0.1f);
+			i++;
+		}
+		// Slime.Position += new Vector3(new Random().NextSingle() * 0.01f, 0, new Random().NextSingle() * 0.01f);
 		base.Update(gameTime);
 	}
 
 	protected override void Draw(GameTime gameTime)
 	{
-		
+
 		camera.ApplyCameraTransform(basicEffect);
 		GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1f, 0);
-		
+
 		world.RenderAt(GraphicsDevice, basicEffect, camera.Position.XZ()/10);
-        Console.WriteLine(camera.GetForward());
+        // Console.WriteLine(camera.GetForward());
 
 
-		foreach (Creature creature in creatures) creature.DrawHealthBar(_spriteBatch, healthTexture, camera);
-		Slime.DrawModel(camera.GetViewMatrix(), camera.Projection);
+		foreach (Creature creature in creatures) {
+			creature.DrawHealthBar(_spriteBatch, healthTexture, camera);
+			creature.DrawModel(camera.GetViewMatrix(), camera.Projection);
+		}
+		// Slime.DrawModel(camera.GetViewMatrix(), camera.Projection);
 
 		_spriteBatch.Begin(depthStencilState: DepthStencilState.Default);
 		_spriteBatch.Draw(texture, Vector2.Zero, Color.White);

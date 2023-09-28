@@ -24,33 +24,21 @@ static class NumExtend
 	{
 		return new((float)(a.X * Math.Cos(theta) - a.Y * Math.Sin(theta)), (float)(a.X * Math.Sin(theta) + a.Y * Math.Cos(theta)));
 	}
-	public static Vector2 PointTo(this Vector2 a, Vector2 b)
-	{
-		return b - a;
-	}
+	public static Vector2 PointTo(this Vector2 a, Vector2 b) => b - a;
+	public static Vector3 PointTo(this Vector3 a, Vector3 b) => b - a;
 	public static float Distance(this Vector2 a, Vector2 b) => a.PointTo(b).Length();
-	public static float Lerp(float v0, float v1, float t)
-	{
-		return v0 + t * (v1 - v0);
-	}
 	public static float Bilerp(float c00, float c10, float c01, float c11, float tx, float ty)
 	{
 		float r1 = Lerp(c00, c10, tx);
 		float r2 = Lerp(c01, c11, tx);
 		return Lerp(r1, r2, ty);
 	}
-	public static float Mod(float x, float m)
-	{
-		return (x % m + m) % m;
-	}
-	public static Vector2 Lerp(Vector2 v0, Vector2 v1, float t)
-	{
-		return new(Lerp(v0.X, v1.X, t), Lerp(v0.Y, v1.Y, t));
-	}
-	public static float FloatRange(this Random r, float min, float max)
-	{
-		return Lerp(min, max, (float)r.NextDouble());
-	}
+	public static float Mod(float x, float m) => (x % m + m) % m;
+	public static float Lerp(float v0, float v1, float t) => v0 + t * (v1 - v0);
+	public static Vector2 Lerp(Vector2 v0, Vector2 v1, float t) =>
+		new(Lerp(v0.X, v1.X, t), Lerp(v0.Y, v1.Y, t));
+	public static float FloatRange(this Random r, float min, float max) =>
+		Lerp(min, max, (float)r.NextDouble());
 	public static int Flatten(int x, int y, int w) => w * y + x;
 	public static void XY(int endx, int endy, int startx, int starty, Action<int, int> act)
 	{
